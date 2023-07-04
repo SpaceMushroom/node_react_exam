@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 
@@ -6,6 +6,8 @@ const Comments = () => {
   const { user } = useContext(UserContext);
   const [question, setQuestion] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [editedQuestion, setEditedQuestion] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -36,27 +38,70 @@ const Comments = () => {
     return <p>No answers found.</p>;
   }
 
-  // if (!user) {
-  //   return <p>User not found.</p>;
-  // }
-  //console.log(question.userId, user._id);
+  const handleEdit = () => {
+    setEditedQuestion(question.question);
+    setIsEditing(true);
+  };
+
+  const handleInputChange = (e) => {
+    setEditedQuestion(e.target.value);
+  };
+
+  const handleEditSubmit = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question: editedQuestion }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setIsEditing(false);
+        window.location.reload();
+      } else {
+        console.error("Error editing question:", response.status);
+      }
+    } catch (error) {
+      console.error("Error editing question:", error);
+    }
+  };
+
+  console.log(editedQuestion);
+
   return (
     <div>
       <h1>Question</h1>
       <div>
-        <div key={question._id}>
-          <h2>{question.question}</h2>
+        {isEditing ? (
           <div>
-            {question.updated ? (
-              <span>Updated: {new Date(question.date).toLocaleString()}</span>
-            ) : (
-              <span>Date: {new Date(question.date).toLocaleString()}</span>
-            )}
-            <span> coments: </span>
-            {question.answers.length}
+            <input
+              type="text"
+              value={editedQuestion}
+              onChange={handleInputChange}
+            />
+            <button onClick={handleEditSubmit}>Save</button>
           </div>
-          {user && question.userId === user._id && <button>Edit</button>}
-        </div>
+        ) : (
+          <div>
+            <h2>{question.question}</h2>
+            <div>
+              {question.updated ? (
+                <span>Updated: {new Date(question.date).toLocaleString()}</span>
+              ) : (
+                <span>Date: {new Date(question.date).toLocaleString()}</span>
+              )}
+              <span> comments: </span>
+              {question.answers.length}
+            </div>
+            {user && question.userId === user._id && !isEditing && (
+              <button onClick={handleEdit}>Edit</button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
