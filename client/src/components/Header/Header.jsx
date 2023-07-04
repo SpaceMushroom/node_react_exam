@@ -8,6 +8,7 @@ import {
   LOGIN_ROUTE,
   NEW_QUESTION_ROUTE,
   PROFILE_ROUTE,
+  QUESTIONS_ROUTE,
 } from "../../routes/const";
 
 import { FaUserCircle } from "react-icons/fa";
@@ -24,9 +25,10 @@ const Header = () => {
       </div>
       <nav className="navigation-items">
         <Link to={MAIN_ROUTE}>Main</Link>
+        <Link to={QUESTIONS_ROUTE}>Questions</Link>
         {isLoggedIn ? (
           <>
-            <Link to={NEW_QUESTION_ROUTE}>+</Link>
+            <Link to={NEW_QUESTION_ROUTE}>New question</Link>
             <Link to={PROFILE_ROUTE} className="user-container">
               <FaUserCircle />
               {user.username}

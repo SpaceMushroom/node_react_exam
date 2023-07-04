@@ -31,9 +31,9 @@ app.post('/register', async (req, res) => {
     const { username, password, passwordConfirmation, email } = req.body;
 
     const user = {
-      username: req.body.username,
-      password: req.body.password,
-      email: req.body.email,
+      username,
+      password,
+      email,
     };
 
     const con = await client.connect();
@@ -58,10 +58,6 @@ app.post('/register', async (req, res) => {
         error: 'Password must be at least 6 characters long.',
       });
       return;
-    }
-
-    if (password !== passwordConfirmation) {
-      throw new Error('Password and password confirmation do not match.');
     }
 
     if (password !== passwordConfirmation) {
@@ -105,7 +101,7 @@ app.post('/login', async (req, res) => {
     } else {
       res
         .status(401)
-        .json({ message: 'Wrong passwor or username!', loggedIn: false });
+        .json({ message: 'Wrong password or username!', loggedIn: false });
     }
     await con.close();
   } catch (err) {
@@ -124,46 +120,65 @@ app.get('/questions', async (req, res) => {
   }
 });
 
+app.get('/questions/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const objectId = new ObjectId(id);
+
+    const con = await client.connect();
+    const data = await con.db(dbName).collection('questions').findOne(objectId);
+
+    await con.close();
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 app.post('/questions', async (req, res) => {
   try {
+    const con = await client.connect();
     const { question, userId } = req.body;
+    const userIdObject = new ObjectId(userId);
+    const createdDate = new Date();
+
     const quest = {
       question,
-      date: new Date(),
-      userId: new ObjectId(userId),
+      date: createdDate,
+      userId: userIdObject,
       updated: false,
       answers: [],
     };
-    const data = await client
-      .db(dbName)
-      .collection('questions')
-      .insertOne(quest);
+
+    const data = await con.db(dbName).collection('questions').insertOne(quest);
     res.status(200).json(data);
-  } catch (err) {
-    res.status(500).send(err);
+    await con.close();
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 
 // /questions?sort=asc
 // /questions?sort=dsc
-// app.get('/questions', async (req, res) => {
-//   try {
-//     const { sort } = req.query;
-//     const sortType = sort === 'asc' ? 1 : -1;
+app.get('/questions', async (req, res) => {
+  try {
+    const { sort } = req.query;
+    const sortType = sort === 'asc' ? 1 : -1;
 
-//     const con = await client.connect();
-//     const data = await con
-//       .db(dbName)
-//       .collection('questions')
-//       .find()
-//       .sort({ question: sortType }) // 1 didejimo -1 mazejimo
-//       .toArray();
-//     await con.close();
-//     res.send(data);
-//   } catch (error) {
-//     res.status(500).send(error);
-//   }
-// });
+    const con = await client.connect();
+    const data = await con
+      .db(dbName)
+      .collection('questions')
+      .find()
+      .sort({ question: sortType }) // 1 didejimo -1 mazejimo
+      .toArray();
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on the ${port}`);

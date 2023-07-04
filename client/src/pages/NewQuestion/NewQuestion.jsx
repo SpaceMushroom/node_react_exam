@@ -1,5 +1,4 @@
-import React, { useContext, useState } from "react";
-import axios from "axios";
+import { useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 
 const NewQuestion = () => {
@@ -7,25 +6,25 @@ const NewQuestion = () => {
   const [question, setQuestion] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-  const userId = user._id.stringify;
+  const userId = user._id;
   console.log(user._id, question);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/questions", {
-        question,
-        userId,
+      const response = await fetch("http://localhost:3000/questions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question, userId }),
       });
 
-      // Check if the request was successful
-      if (response.status === 200) {
+      if (response.ok) {
         setQuestion("");
         setError("");
         setSuccess(true);
       } else {
-        setError("An error occurred while submitting the question.");
+        throw new Error("An error occurred while submitting the question.");
       }
     } catch (err) {
       setError("An error occurred while submitting the question.");
