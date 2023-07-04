@@ -1,4 +1,6 @@
 import { createContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { LOGIN_ROUTE, PROFILE_ROUTE } from "../routes/const";
 
 const UserContext = createContext({
   user: null,
@@ -8,12 +10,19 @@ const UserContext = createContext({
 });
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user"))); // null | {email: "test", password: "asd123"}
-  const isLoggedIn = !!user; // null | {email: "test", password: "asd123"
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const isLoggedIn = !!user;
+  const navigate = useNavigate();
 
   const handleLogin = (user) => {
-    setUser(user);
-    localStorage.setItem("user", true); //cia pakeisti i user objekta kai veiks loginas
+    if (user) {
+      setUser(user);
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate(PROFILE_ROUTE);
+    } else {
+      setUser(null);
+      navigate(LOGIN_ROUTE);
+    }
   };
 
   const handleLogout = () => {

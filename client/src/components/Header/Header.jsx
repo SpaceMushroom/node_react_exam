@@ -13,7 +13,7 @@ import {
 import { FaUserCircle } from "react-icons/fa";
 
 const Header = () => {
-  const { isLoggedIn } = useContext(UserContext);
+  const { isLoggedIn, user } = useContext(UserContext);
 
   return (
     <nav className="navigation">
@@ -29,7 +29,7 @@ const Header = () => {
             <Link to={NEW_QUESTION_ROUTE}>+</Link>
             <Link to={PROFILE_ROUTE} className="user-container">
               <FaUserCircle />
-              {"username"}
+              {user.username}
             </Link>
           </>
         ) : (
