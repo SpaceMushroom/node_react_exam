@@ -1,0 +1,13 @@
+.login-container {
+  height: 100dvh;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 4rem;
+}
+
+.authenticated-container {
+  padding: 2rem;
+  min-height: calc(100dvh - 130px) ;
+}
