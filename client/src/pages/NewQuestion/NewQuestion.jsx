@@ -8,7 +8,7 @@ const NewQuestion = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const userId = user._id.stringify;
-  console.log(user._id);
+  console.log(user._id, question);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ const NewQuestion = () => {
       // Check if the request was successful
       if (response.status === 200) {
         setQuestion("");
-
+        setError("");
         setSuccess(true);
       } else {
         setError("An error occurred while submitting the question.");

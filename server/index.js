@@ -146,24 +146,24 @@ app.post('/questions', async (req, res) => {
 
 // /questions?sort=asc
 // /questions?sort=dsc
-app.get('/questions', async (req, res) => {
-  try {
-    const { sort } = req.query;
-    const sortType = sort === 'asc' ? 1 : -1;
+// app.get('/questions', async (req, res) => {
+//   try {
+//     const { sort } = req.query;
+//     const sortType = sort === 'asc' ? 1 : -1;
 
-    const con = await client.connect();
-    const data = await con
-      .db(dbName)
-      .collection('questions')
-      .find()
-      .sort({ question: sortType }) // 1 didejimo -1 mazejimo
-      .toArray();
-    await con.close();
-    res.send(data);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
+//     const con = await client.connect();
+//     const data = await con
+//       .db(dbName)
+//       .collection('questions')
+//       .find()
+//       .sort({ question: sortType }) // 1 didejimo -1 mazejimo
+//       .toArray();
+//     await con.close();
+//     res.send(data);
+//   } catch (error) {
+//     res.status(500).send(error);
+//   }
+// });
 
 app.listen(port, () => {
   console.log(`Server is running on the ${port}`);
