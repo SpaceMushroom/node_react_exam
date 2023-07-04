@@ -27,7 +27,9 @@ const Login = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        handleLogin(data.user);
+        if (data.loggedIn) {
+          handleLogin(data.user);
+        }
         setMessage(data.message);
       })
       .catch((error) => {

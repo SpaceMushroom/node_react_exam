@@ -113,6 +113,37 @@ app.post('/login', async (req, res) => {
   }
 });
 
+app.get('/questions', async (req, res) => {
+  try {
+    const con = await client.connect();
+    const data = await con.db(dbName).collection('questions').find().toArray();
+    await con.close();
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+app.post('/questions', async (req, res) => {
+  try {
+    const { question, userId } = req.body;
+    const quest = {
+      question,
+      date: new Date(),
+      userId: new ObjectId(userId),
+      updated: false,
+      answers: [],
+    };
+    const data = await client
+      .db(dbName)
+      .collection('questions')
+      .insertOne(quest);
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 // /questions?sort=asc
 // /questions?sort=dsc
 app.get('/questions', async (req, res) => {
@@ -123,9 +154,9 @@ app.get('/questions', async (req, res) => {
     const con = await client.connect();
     const data = await con
       .db(dbName)
-      .collection('owners')
+      .collection('questions')
       .find()
-      .sort({ income: sortType }) // 1 didejimo -1 mazejimo
+      .sort({ question: sortType }) // 1 didejimo -1 mazejimo
       .toArray();
     await con.close();
     res.send(data);
