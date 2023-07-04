@@ -7,6 +7,7 @@ const UserContext = createContext({
   isLoggedIn: false,
   handleLogin: () => null,
   handleLogout: () => null,
+  handleRegister: () => null,
 });
 
 const UserProvider = ({ children }) => {
@@ -25,6 +26,12 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  const handleRegister = (data) => {
+    if (data) {
+      navigate(LOGIN_ROUTE);
+    }
+  };
+
   const handleLogout = () => {
     setUser(null);
     localStorage.setItem("user", null);
@@ -37,6 +44,7 @@ const UserProvider = ({ children }) => {
         isLoggedIn,
         handleLogin,
         handleLogout,
+        handleRegister,
       }}
     >
       {children}

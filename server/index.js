@@ -41,9 +41,27 @@ app.post('/register', async (req, res) => {
     if (!username || !password || !passwordConfirmation || !email) {
       res.status(400).send({
         error:
-          'Username, password, passwordConfirmation, and email are required.',
+          'Username, password, password confirmation, and email are required.',
       });
       return;
+    }
+
+    if (username.length < 5) {
+      res.status(400).send({
+        error: 'Username must be at least 5 characters long.',
+      });
+      return;
+    }
+
+    if (password.length < 6) {
+      res.status(400).send({
+        error: 'Password must be at least 6 characters long.',
+      });
+      return;
+    }
+
+    if (password !== passwordConfirmation) {
+      throw new Error('Password and password confirmation do not match.');
     }
 
     if (password !== passwordConfirmation) {
@@ -67,7 +85,7 @@ app.post('/register', async (req, res) => {
     await con.close();
     res.send(data);
   } catch (error) {
-    res.status(500).send({ error: error.message });
+    res.status(500).send(error);
   }
 });
 
