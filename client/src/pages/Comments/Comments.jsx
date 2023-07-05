@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
+import { QUESTIONS_ROUTE } from "../../routes/const";
 
 const Comments = () => {
   const { user } = useContext(UserContext);
@@ -8,6 +9,7 @@ const Comments = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [editedQuestion, setEditedQuestion] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -25,18 +27,6 @@ const Comments = () => {
 
     fetchQuestion();
   }, [id]);
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (!question) {
-    return <p>No question found.</p>;
-  }
-
-  if (!question.answers) {
-    return <p>No answers found.</p>;
-  }
 
   const handleEdit = () => {
     setEditedQuestion(question.question);
@@ -70,7 +60,32 @@ const Comments = () => {
     }
   };
 
-  console.log(editedQuestion);
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/questions/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        alert("Question successfully deleted!");
+        navigate(QUESTIONS_ROUTE);
+      }
+    } catch (error) {
+      console.error("Deleting error:", error);
+    }
+  };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!question) {
+    return <p>No question found.</p>;
+  }
+
+  if (!question.answers) {
+    return <p>No answers found.</p>;
+  }
+  console.log(id, handleDelete);
 
   return (
     <div>
@@ -98,7 +113,10 @@ const Comments = () => {
               {question.answers.length}
             </div>
             {user && question.userId === user._id && !isEditing && (
-              <button onClick={handleEdit}>Edit</button>
+              <div>
+                <button onClick={handleEdit}>Edit</button>
+                <button onClick={handleDelete}>Delete</button>
+              </div>
             )}
           </div>
         )}

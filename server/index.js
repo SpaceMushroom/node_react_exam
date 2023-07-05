@@ -180,6 +180,23 @@ app.patch('/questions/:id', async (req, res) => {
   }
 });
 
+app.delete('/questions/:id', async (req, res) => {
+  try {
+    const con = await client.connect();
+
+    const { id } = req.params;
+
+    const data = await con
+      .db(dbName)
+      .collection('questions')
+      .deleteOne({ _id: new ObjectId(id) });
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // /questions?sort=asc
 // /questions?sort=dsc
 // app.get('/questions', async (req, res) => {
