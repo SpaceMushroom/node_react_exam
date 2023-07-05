@@ -219,6 +219,24 @@ app.post('/questions/:id/answers', async (req, res) => {
   }
 });
 
+app.get('/questions/:id/answers', async (req, res) => {
+  try {
+    const con = await client.connect();
+    const { id } = req.params;
+    const data = await con
+      .db(dbName)
+      .collection('answers')
+      .find({
+        questionId: new ObjectId(id),
+      })
+      .toArray();
+    await con.close();
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 // /questions?sort=asc
 // /questions?sort=dsc
 // app.get('/questions', async (req, res) => {

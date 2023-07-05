@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import Answers from "../../components/Answers/Answers";
 import { useParams, useNavigate } from "react-router-dom";
 import { UserContexts } from "../../context/UserContext";
 import { QUESTIONS_ROUTE } from "../../routes/const";
@@ -29,7 +30,6 @@ const Comments = () => {
         console.error("Error fetching question:", error);
       }
     };
-
     fetchQuestion();
   }, [id]);
 
@@ -104,7 +104,7 @@ const Comments = () => {
     }
   };
 
-  //console.log(answer, id, user._id);
+  console.log(id);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -154,7 +154,7 @@ const Comments = () => {
       </div>
       <div>
         <h1>Answers</h1>
-        <div>Answers fetch</div>
+        <div>{isLoading ? <p>Loading..</p> : <Answers commentId={id} />}</div>
         {user && (
           <div>
             {success && <p>Question submitted successfully!</p>}
