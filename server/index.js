@@ -197,6 +197,28 @@ app.delete('/questions/:id', async (req, res) => {
   }
 });
 
+app.post('/questions/:id/answers', async (req, res) => {
+  try {
+    const con = await client.connect();
+    const { id } = req.params;
+    const answer = await con
+      .db(dbName)
+      .collection('answers')
+      .insertOne({
+        answer: req.body.answer,
+        count: 0,
+        updated: false,
+        created: new Date(),
+        questionId: new ObjectId(id),
+        userId: new ObjectId(req.body.userId),
+      });
+    res.status(200).json(answer);
+    await con.close();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // /questions?sort=asc
 // /questions?sort=dsc
 // app.get('/questions', async (req, res) => {

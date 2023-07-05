@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
+import { UserContexts } from "../../context/UserContext";
 import { QUESTIONS_ROUTE } from "../../routes/const";
 
 const Comments = () => {
@@ -9,6 +9,11 @@ const Comments = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [editedQuestion, setEditedQuestion] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+
+  const [answer, setAnswer] = useState("");
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -74,6 +79,33 @@ const Comments = () => {
     }
   };
 
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/questions/${id}/answers`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ answer, userId: user._id }),
+        }
+      );
+
+      if (response.ok) {
+        setAnswer("");
+        setError("");
+        setSuccess(true);
+      } else {
+        throw new Error("An error occurred while submitting the question.");
+      }
+    } catch (err) {
+      setError("An error occurred while submitting the question.");
+    }
+  };
+
+  //console.log(answer, id, user._id);
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -85,7 +117,6 @@ const Comments = () => {
   if (!question.answers) {
     return <p>No answers found.</p>;
   }
-  console.log(id, handleDelete);
 
   return (
     <div>
@@ -118,6 +149,30 @@ const Comments = () => {
                 <button onClick={handleDelete}>Delete</button>
               </div>
             )}
+          </div>
+        )}
+      </div>
+      <div>
+        <h1>Answers</h1>
+        <div>Answers fetch</div>
+        {user && (
+          <div>
+            {success && <p>Question submitted successfully!</p>}
+            {error && <p>{error}</p>}
+            <form onSubmit={handleCommentSubmit}>
+              <div>
+                <label htmlFor="answer">Answer:</label>
+                <input
+                  type="text"
+                  id="answer"
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  required
+                />
+              </div>
+              <div></div>
+              <button type="submit">Submit</button>
+            </form>
           </div>
         )}
       </div>
