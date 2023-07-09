@@ -1,0 +1,24 @@
+@import "../../styles/colors.scss";
+
+.main {
+    height: calc(100dvh - 120px);
+    background-color: $primaryBlueLight;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .form {
+        display: grid;
+        gap: 1rem;
+       
+        * {
+            display: grid;
+            gap: 0.3rem;
+        }
+    }
+
+    a {
+        text-decoration: none;
+    }
+}

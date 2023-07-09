@@ -1,8 +1,9 @@
 import { useContext, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
-
 import { REGISTER_ROUTE } from "../../routes/const";
+import Button from "../../components/Button/Button";
+import "./Login.scss";
 
 const Login = () => {
   const { handleLogin } = useContext(UserContext);
@@ -38,24 +39,33 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="main">
       <form className="form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          onChange={(e) => setPassword(e.target.password)}
-          ref={passwordRef}
-          required
-        />
+        <div>
+          <label>Username:</label>
+          <input
+            type="text"
+            name="username"
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            name="password"
+            onChange={(e) => setPassword(e.target.password)}
+            ref={passwordRef}
+            required
+          />
+        </div>
+
         {message && <p className="error">{message}</p>}
-        <button>Login</button>
-        <Link to={REGISTER_ROUTE}>Register</Link>
+        <Button>Login</Button>
+        <Link to={REGISTER_ROUTE}>
+          <Button variant={"outlined"}>Register</Button>
+        </Link>
       </form>
     </div>
   );

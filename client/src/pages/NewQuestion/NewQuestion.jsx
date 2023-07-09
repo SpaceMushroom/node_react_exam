@@ -1,5 +1,7 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
+import Button from "../../components/Button/Button";
+import "./NewQuestion.scss";
 
 const NewQuestion = () => {
   const { user } = useContext(UserContext);
@@ -32,13 +34,13 @@ const NewQuestion = () => {
   };
 
   return (
-    <div>
+    <div className="new">
       {success && <p>Question submitted successfully!</p>}
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form">
           <label htmlFor="question">Question:</label>
-          <input
+          <textarea
             type="text"
             id="question"
             value={question}
@@ -46,8 +48,7 @@ const NewQuestion = () => {
             required
           />
         </div>
-        <div></div>
-        <button type="submit">Submit</button>
+        <Button type="submit">Submit</Button>
       </form>
     </div>
   );

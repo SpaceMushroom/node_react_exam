@@ -1,0 +1,10 @@
+@import "../../styles/colors.scss";
+
+footer {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $primaryBlue;
+    color: white;
+}

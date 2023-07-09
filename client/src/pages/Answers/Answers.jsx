@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import Answers from "../../components/Answers/Answers";
+
 import { useParams, useNavigate } from "react-router-dom";
-import { UserContexts } from "../../context/UserContext";
+import { UserContext } from "../../context/UserContext";
 import { QUESTIONS_ROUTE } from "../../routes/const";
 
 const Comments = () => {
@@ -14,6 +14,9 @@ const Comments = () => {
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+
+  const [isCommentEditing, setIsCommentEditing] = useState(false);
+  const [editedAnswer, setEditedAnswer] = useState("");
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -33,13 +36,82 @@ const Comments = () => {
     fetchQuestion();
   }, [id]);
 
+  const increaseCount = async (count, id) => {
+    const newCount = count + 1;
+    await updateCount(id, newCount);
+  };
+
+  const decreaseCount = async (count, id) => {
+    const newCount = count - 1;
+    await updateCount(id, newCount);
+  };
+
+  const updateCount = async (id, newCount) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/answers/${id}/count`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ count: newCount }),
+        }
+      );
+
+      if (response.ok) {
+        window.location.reload();
+        console.log("Count updated successfully");
+      } else {
+        throw new Error("Failed to update count");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleEdit = () => {
     setEditedQuestion(question.question);
     setIsEditing(true);
   };
 
+  const handleCommentEdit = (ans) => {
+    setEditedAnswer(ans);
+    setIsCommentEditing(true);
+  };
+
   const handleInputChange = (e) => {
     setEditedQuestion(e.target.value);
+  };
+
+  const handleAnswerInputChange = (e) => {
+    setEditedAnswer(e.target.value);
+  };
+
+  const handleAnswerEditSubmit = async (answerID) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/answers/${answerID}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ answer: editedAnswer }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        //console.log(data);
+        setIsCommentEditing(false);
+        window.location.reload();
+      } else {
+        console.error("Error editing question:", response.status);
+      }
+    } catch (error) {
+      console.error("Error editing question:", error);
+    }
   };
 
   const handleEditSubmit = async () => {
@@ -54,7 +126,7 @@ const Comments = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         setIsEditing(false);
         window.location.reload();
       } else {
@@ -79,6 +151,20 @@ const Comments = () => {
     }
   };
 
+  const handleCommentDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/answers/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        alert("Question successfully deleted!");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Deleting error:", error);
+    }
+  };
+
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
 
@@ -96,6 +182,7 @@ const Comments = () => {
         setAnswer("");
         setError("");
         setSuccess(true);
+        window.location.reload();
       } else {
         throw new Error("An error occurred while submitting the question.");
       }
@@ -104,7 +191,7 @@ const Comments = () => {
     }
   };
 
-  console.log(id);
+  //console.log(question);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -152,9 +239,71 @@ const Comments = () => {
           </div>
         )}
       </div>
+
+      {/* {-----------------------------------------------------------------} */}
+
       <div>
         <h1>Answers</h1>
-        <div>{isLoading ? <p>Loading..</p> : <Answers commentId={id} />}</div>
+
+        <div>
+          {question.answers.map((answer) => (
+            <div key={answer._id}>
+              <div>
+                <div>
+                  <button
+                    onClick={() => increaseCount(answer.count, answer._id)}
+                  >
+                    +
+                  </button>
+                  <span>{answer.count}</span>
+                  <button
+                    onClick={() => decreaseCount(answer.count, answer._id)}
+                  >
+                    -
+                  </button>
+                </div>
+                {isCommentEditing ? (
+                  <div>
+                    <input
+                      type="text"
+                      value={editedAnswer}
+                      onChange={handleAnswerInputChange}
+                    />
+                    <button onClick={() => handleAnswerEditSubmit(answer._id)}>
+                      Save
+                    </button>
+                  </div>
+                ) : (
+                  <h4>{answer.answer}</h4>
+                )}
+                <div>
+                  {answer.updated ? (
+                    <span>
+                      Updated: {new Date(answer.created).toLocaleString()}
+                    </span>
+                  ) : (
+                    <span>
+                      Date: {new Date(answer.created).toLocaleString()}
+                    </span>
+                  )}
+                </div>
+                {user && answer.userId === user._id && !isCommentEditing && (
+                  <div>
+                    <button onClick={() => handleCommentEdit(answer.answer)}>
+                      Edit
+                    </button>
+                    <button onClick={() => handleCommentDelete(answer._id)}>
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* {-----------------------------------------------------------------} */}
+
         {user && (
           <div>
             {success && <p>Question submitted successfully!</p>}

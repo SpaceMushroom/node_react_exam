@@ -1,6 +1,7 @@
 import { Link, generatePath } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { COMMENTS_ROUTE } from "../../routes/const";
+import "./Questions.scss";
 
 const Questions = () => {
   const [questions, setQuestions] = useState([]);
@@ -11,7 +12,7 @@ const Questions = () => {
 
   const fetchQuestions = async () => {
     try {
-      const response = await fetch("http://localhost:3000/questions");
+      const response = await fetch("http://localhost:3000/questions?sort=asc");
       const data = await response.json();
       setQuestions(data);
     } catch (error) {
@@ -19,16 +20,18 @@ const Questions = () => {
     }
   };
 
+  console.log(questions);
+
   return (
-    <div>
-      <h1>Questions</h1>
-      <div>
+    <div className="questions">
+      <div className="container">
+        <h2>Questions</h2>
         {questions.map((question) => (
           <div key={question._id}>
             <Link to={generatePath(COMMENTS_ROUTE, { id: question._id })}>
-              <h2>{question.question}</h2>
+              <h3>{question.question}</h3>
             </Link>
-            <div>
+            <div className="info">
               {question.updated ? (
                 <span>Updated: {new Date(question.date).toLocaleString()}</span>
               ) : (

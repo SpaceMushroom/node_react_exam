@@ -11,7 +11,7 @@ const UserContext = createContext({
 });
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("usser")));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const isLoggedIn = !!user;
   const navigate = useNavigate();
 

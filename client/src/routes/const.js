@@ -5,7 +5,7 @@ import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import Profile from "../pages/Profile/Profile";
 import NewQuestion from "../pages/NewQuestion/NewQuestion";
-import Comments from "../pages/Comments/Comments";
+import Answers from "../pages/Answers/Answers";
 import Questions from "../pages/Questions/Questions";
 
 export const REGISTER_ROUTE = "/register";
@@ -33,7 +33,7 @@ export const loginRoutes = {
     },
     {
       path: COMMENTS_ROUTE,
-      Component: Comments,
+      Component: Answers,
     },
     {
       path: QUESTIONS_ROUTE,
@@ -59,7 +59,7 @@ export const authenticatedRoutes = {
     },
     {
       path: COMMENTS_ROUTE,
-      Component: Comments,
+      Component: Answers,
     },
     {
       path: QUESTIONS_ROUTE,

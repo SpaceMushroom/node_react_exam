@@ -111,14 +111,56 @@ app.post('/login', async (req, res) => {
 
 app.get('/questions', async (req, res) => {
   try {
+    const { sortOrder } = req.query; // Get the sort order from the request query string
+
     const con = await client.connect();
-    const data = await con.db(dbName).collection('questions').find().toArray();
+    const data = await con
+      .db(dbName)
+      .collection('questions')
+      .aggregate([
+        {
+          $lookup: {
+            from: 'answers',
+            localField: '_id',
+            foreignField: 'questionId',
+            as: 'answers',
+          },
+        },
+        {
+          $sort: { _id: sortOrder === 'asc' ? 1 : -1 },
+        },
+      ])
+      .toArray();
     await con.close();
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(500).send(err);
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
+
+// app.get('/questions', async (req, res) => {
+//   try {
+//     const con = await client.connect();
+//     const data = await con
+//       .db(dbName)
+//       .collection('questions')
+//       .aggregate([
+//         {
+//           $lookup: {
+//             from: 'answers',
+//             localField: '_id',
+//             foreignField: 'questionId',
+//             as: 'answers',
+//           },
+//         },
+//       ])
+//       .toArray();
+//     await con.close();
+//     res.send(data);
+//   } catch (error) {
+//     res.status(500).send(error);
+//   }
+// });
 
 app.get('/questions/:id', async (req, res) => {
   try {
@@ -127,10 +169,31 @@ app.get('/questions/:id', async (req, res) => {
     const objectId = new ObjectId(id);
 
     const con = await client.connect();
-    const data = await con.db(dbName).collection('questions').findOne(objectId);
+    const data = await con
+      .db(dbName)
+      .collection('questions')
+      .aggregate([
+        {
+          $match: {
+            _id: objectId,
+          },
+        },
+        {
+          $lookup: {
+            from: 'answers',
+            localField: '_id',
+            foreignField: 'questionId',
+            as: 'answers',
+          },
+        },
+        {
+          $limit: 1,
+        },
+      ])
+      .toArray();
 
     await con.close();
-    res.status(200).json(data);
+    res.status(200).json(data[0]);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -219,21 +282,54 @@ app.post('/questions/:id/answers', async (req, res) => {
   }
 });
 
-app.get('/questions/:id/answers', async (req, res) => {
+app.delete('/answers/:id', async (req, res) => {
   try {
     const con = await client.connect();
     const { id } = req.params;
     const data = await con
       .db(dbName)
       .collection('answers')
-      .find({
-        questionId: new ObjectId(id),
-      })
-      .toArray();
+      .deleteOne({ _id: new ObjectId(id) });
+    await con.close();
+    res.send(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+app.patch('/answers/:id', async (req, res) => {
+  try {
+    const con = await client.connect();
+    const { id } = req.params;
+    const data = await con
+      .db(dbName)
+      .collection('answers')
+      .updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { answer: req.body.answer, updated: true } },
+      );
     await con.close();
     res.status(200).json(data);
-  } catch (err) {
-    res.status(500).send(err);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+app.patch('/answers/:id/count', async (req, res) => {
+  try {
+    const con = await client.connect();
+    const { id } = req.params;
+    const data = await con
+      .db(dbName)
+      .collection('answers')
+      .updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { count: req.body.count } },
+      );
+    await con.close();
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 

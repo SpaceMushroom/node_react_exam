@@ -1,6 +1,6 @@
 @import "../../styles/colors.scss";
 
-.register {
+.new {
     height: calc(100dvh - 120px);
     background-color: $primaryBlueLight;
     color: white;
@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: center;
 
-    form {
+    .form {
         display: grid;
         gap: 0.5rem;
        
@@ -18,7 +18,12 @@
         }
     }
 
-    a {
-        text-decoration: none;
+    textarea {
+        margin-bottom: 1rem;
+        width: 300px;
+    }
+
+    p {
+        margin-right: 2rem;
     }
 }

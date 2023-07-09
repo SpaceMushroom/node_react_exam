@@ -1,12 +1,13 @@
 import "./Layout.css";
 import Header from "../components/Header/Header";
+import Footer from "../components/Footer/Footer";
 
 const LoginLayout = ({ children }) => {
   return (
     <div className="login-container">
       <Header />
-      <h1>Hello to my app!</h1>
       {children}
+      <Footer />
     </div>
   );
 };

@@ -1,0 +1,39 @@
+@import "../../styles/colors.scss";
+
+
+
+.navigation {
+    height: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: $primaryBlue;
+
+    a {
+    text-decoration: none;
+    color: white;
+    padding-left: 1rem;
+    }
+
+    .logo {
+        .info {
+            padding-bottom: 2rem;
+        }
+        .google {
+            padding-bottom: 1.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    }
+
+    .user { 
+        padding-left: 2rem;
+        padding-right: 0.2rem;
+    }
+
+    .logged, .navigation-items, .notLogged {
+        display: flex;
+    }
+
+    
+}
