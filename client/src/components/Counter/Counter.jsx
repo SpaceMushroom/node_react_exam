@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../../context/UserContext";
 import "./Counter.scss";
 
 const Counter = ({ answer }) => {
+  const { user } = useContext(UserContext);
   const [count, setCount] = useState(answer.count);
 
   const updateCount = async (id, newCount) => {
@@ -38,11 +40,15 @@ const Counter = ({ answer }) => {
   };
 
   return (
-    <div className="counter">
-      <button onClick={increaseCount}>+</button>
-      <span>{count}</span>
-      <button onClick={decreaseCount}>-</button>
-    </div>
+    <>
+      {user && (
+        <div className="counter">
+          <button onClick={increaseCount}>+</button>
+          <span>{count}</span>
+          <button onClick={decreaseCount}>-</button>
+        </div>
+      )}
+    </>
   );
 };
 
