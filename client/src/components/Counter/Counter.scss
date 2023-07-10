@@ -1,0 +1,23 @@
+@import "../../styles/colors.scss";
+
+.counter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button {
+        border: none;
+        border-radius: 50%;
+        border: solid white 1px;
+        background-color: $primaryBlueLight;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1.3rem;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

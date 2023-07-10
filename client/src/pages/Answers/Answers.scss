@@ -1,0 +1,46 @@
+@import "../../styles/colors.scss";
+
+.answers {
+    min-height: calc(100dvh - 120px);
+    background-color: $primaryBlueLight;
+    color: white;
+    display: grid;
+    align-items: center;
+    padding: 2rem;
+
+    h2 {
+        margin: 0;
+      
+    }
+
+    .data {
+        font-size: 12px;
+    }
+
+    .btnContainer {
+        *{
+            margin-right: 0.7rem;
+            margin-top: 0.5rem;
+        }
+    }
+
+    .edit {
+        display: grid;
+        gap: 0.5rem;
+        justify-items: center;
+
+        textarea {
+            width: 300px;
+        }
+    }
+
+    .container {
+        padding: 0.5rem;
+        box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    }
+}    
+
+p {
+    background-color: $primaryBlueLight;
+    margin: 0;
+}

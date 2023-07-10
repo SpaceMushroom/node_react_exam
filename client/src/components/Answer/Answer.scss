@@ -1,0 +1,21 @@
+.answer {
+    padding: 1rem 3rem;
+    
+    .ansContainer {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .info {
+        font-size: 12px;
+    }
+
+    .answerContainer {
+        margin-top: 1rem;
+        padding: 0.5rem;
+        box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+        border-radius: 0.5rem;
+    }
+
+}

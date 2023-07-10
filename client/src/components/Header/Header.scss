@@ -8,6 +8,8 @@
     justify-content: space-around;
     align-items: center;
     background-color: $primaryBlue;
+    position: sticky;
+    top: 0;
 
     a {
     text-decoration: none;

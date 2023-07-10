@@ -20,14 +20,12 @@ const Questions = () => {
     }
   };
 
-  console.log(questions);
-
   return (
     <div className="questions">
       <div className="container">
         <h2>Questions</h2>
         {questions.map((question) => (
-          <div key={question._id}>
+          <div className="mapContainer" key={question._id}>
             <Link to={generatePath(COMMENTS_ROUTE, { id: question._id })}>
               <h3>{question.question}</h3>
             </Link>

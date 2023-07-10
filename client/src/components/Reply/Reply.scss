@@ -1,0 +1,20 @@
+.reply {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+
+    form {
+        display: grid;
+        gap: 0.5rem;
+    }
+    
+    textarea {
+        width: 300px;
+    }
+
+    div {
+        margin-bottom: 2rem;
+    }
+
+
+}
