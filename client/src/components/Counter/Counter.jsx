@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import PropTypes from "prop-types";
 import { UserContext } from "../../context/UserContext";
 import "./Counter.scss";
 
@@ -40,16 +41,16 @@ const Counter = ({ answer }) => {
   };
 
   return (
-    <>
-      {user && (
-        <div className="counter">
-          <button onClick={increaseCount}>+</button>
-          <span>{count}</span>
-          <button onClick={decreaseCount}>-</button>
-        </div>
-      )}
-    </>
+    <div className="counter">
+      <button onClick={user ? increaseCount : () => {}}>+</button>
+      <span>{count}</span>
+      <button onClick={user ? decreaseCount : () => {}}>-</button>
+    </div>
   );
 };
 
 export default Counter;
+
+Counter.protoTypes = {
+  id: PropTypes.object,
+};

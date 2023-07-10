@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import PropTypes from "prop-types";
 import { UserContext } from "../../context/UserContext";
 import Button from "../Button/Button";
 import Reply from "../Reply/Reply";
@@ -69,15 +70,21 @@ const Answer = ({ id, question }) => {
       ) : (
         <div>
           {question.answers.map((answer, index) => (
-            <div className="answerContainer" key={answer._id}>
+            <div
+              className={
+                isCommentEditing ? "answerContainer" : "answerContainer shadow"
+              }
+              key={answer._id}
+            >
               <div>
                 {isCommentEditing ? (
                   <div
+                    className={
+                      answer._id === selectedAnswerId
+                        ? "editComment displayFlex"
+                        : "editComment displayNone"
+                    }
                     key={answer._id}
-                    style={{
-                      display:
-                        answer._id === selectedAnswerId ? "block" : "none",
-                    }}
                   >
                     <textarea
                       type="text"
@@ -89,22 +96,25 @@ const Answer = ({ id, question }) => {
                     </Button>
                   </div>
                 ) : (
-                  <div className="ansContainer">
-                    <Counter answer={answer} />
-                    <h4>{answer.answer}</h4>
-                  </div>
+                  <>
+                    <div className="ansContainer">
+                      <Counter answer={answer} />
+                      <h4>{answer.answer}</h4>
+                    </div>
+                    <div className="info">
+                      {answer.updated ? (
+                        <span>
+                          Updated: {new Date(answer.created).toLocaleString()}
+                        </span>
+                      ) : (
+                        <span>
+                          Date: {new Date(answer.created).toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+                  </>
                 )}
-                <div className="info">
-                  {answer.updated ? (
-                    <span>
-                      Updated: {new Date(answer.created).toLocaleString()}
-                    </span>
-                  ) : (
-                    <span>
-                      Date: {new Date(answer.created).toLocaleString()}
-                    </span>
-                  )}
-                </div>
+
                 {user && answer.userId === user._id && !isCommentEditing && (
                   <div className="btnContainer">
                     <Button
@@ -134,3 +144,8 @@ const Answer = ({ id, question }) => {
 };
 
 export default Answer;
+
+Answer.protoTypes = {
+  id: PropTypes.string,
+  question: PropTypes.object,
+};

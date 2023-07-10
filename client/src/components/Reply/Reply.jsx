@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { UserContext } from "../../context/UserContext";
+import PropTypes from "prop-types";
 import Button from "../Button/Button";
 import "./Reply.scss";
 
@@ -57,3 +58,7 @@ const Reply = ({ id }) => {
 };
 
 export default Reply;
+
+Reply.protoTypes = {
+  id: PropTypes.string,
+};
