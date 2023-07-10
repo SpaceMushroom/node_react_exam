@@ -85,8 +85,6 @@ const Comments = () => {
     return <p className="answers">No question found.</p>;
   }
 
-  //console.log(question);
-
   return (
     <div className="answers">
       <div className="container">

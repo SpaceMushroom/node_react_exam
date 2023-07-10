@@ -33,6 +33,22 @@
             font-weight: 600;
             margin: 0;
         }
+        .buttonsContainer {
+            display: flex;
+            justify-content: space-between;
+            .sortContainer {
+                * {
+                    margin: 0 0.5rem 1rem 0;
+                }
+            }
+
+            .filterContainer {
+                * {
+                    margin: 0 0 1rem 0.5rem;
+                }
+            }
+        }
+
     }
 
    

@@ -9,7 +9,6 @@ const NewQuestion = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const userId = user._id;
-  //console.log(user._id, question);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

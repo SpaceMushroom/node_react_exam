@@ -12,7 +12,6 @@ const Profile = () => {
     handleLogout();
     navigate("/");
   };
-  console.log(user);
 
   return (
     <div className="main">

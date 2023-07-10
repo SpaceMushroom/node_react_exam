@@ -19,12 +19,11 @@ const Counter = ({ answer }) => {
 
       if (response.ok) {
         setCount(newCount);
-        console.log("Count updated successfully");
       } else {
         throw new Error("Failed to update count");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

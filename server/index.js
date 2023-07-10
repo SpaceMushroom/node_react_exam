@@ -111,26 +111,54 @@ app.post('/login', async (req, res) => {
 
 app.get('/questions', async (req, res) => {
   try {
-    const { sortOrder } = req.query; // Get the sort order from the request query string
+    const { sort, filter } = req.query;
 
     const con = await client.connect();
+    let pipeline = [
+      {
+        $lookup: {
+          from: 'answers',
+          localField: '_id',
+          foreignField: 'questionId',
+          as: 'answers',
+        },
+      },
+      {
+        $addFields: {
+          answerCount: { $size: '$answers' }, // Add a new field to hold the count of answers
+        },
+      },
+      {
+        $sort: { date: sort === 'asc' ? 1 : -1 },
+      },
+    ];
+
+    if (filter === 'withAnswers') {
+      pipeline = [
+        ...pipeline,
+        {
+          $match: {
+            answerCount: { $gt: 0 }, // Filter for questions with answers
+          },
+        },
+      ];
+    } else if (filter === 'withoutAnswers') {
+      pipeline = [
+        ...pipeline,
+        {
+          $match: {
+            answerCount: { $eq: 0 }, // Filter for questions without answers
+          },
+        },
+      ];
+    }
+
     const data = await con
       .db(dbName)
       .collection('questions')
-      .aggregate([
-        {
-          $lookup: {
-            from: 'answers',
-            localField: '_id',
-            foreignField: 'questionId',
-            as: 'answers',
-          },
-        },
-        {
-          $sort: { _id: sortOrder === 'asc' ? 1 : -1 },
-        },
-      ])
+      .aggregate(pipeline)
       .toArray();
+
     await con.close();
     res.send(data);
   } catch (error) {
@@ -140,6 +168,8 @@ app.get('/questions', async (req, res) => {
 
 // app.get('/questions', async (req, res) => {
 //   try {
+//     const { sort } = req.query;
+
 //     const con = await client.connect();
 //     const data = await con
 //       .db(dbName)
@@ -152,6 +182,9 @@ app.get('/questions', async (req, res) => {
 //             foreignField: 'questionId',
 //             as: 'answers',
 //           },
+//         },
+//         {
+//           $sort: { date: sort === 'asc' ? 1 : -1 },
 //         },
 //       ])
 //       .toArray();
@@ -332,27 +365,6 @@ app.patch('/answers/:id/count', async (req, res) => {
     res.status(500).send(error);
   }
 });
-
-// /questions?sort=asc
-// /questions?sort=dsc
-// app.get('/questions', async (req, res) => {
-//   try {
-//     const { sort } = req.query;
-//     const sortType = sort === 'asc' ? 1 : -1;
-
-//     const con = await client.connect();
-//     const data = await con
-//       .db(dbName)
-//       .collection('questions')
-//       .find()
-//       .sort({ question: sortType }) // 1 didejimo -1 mazejimo
-//       .toArray();
-//     await con.close();
-//     res.send(data);
-//   } catch (error) {
-//     res.status(500).send(error);
-//   }
-// });
 
 app.listen(port, () => {
   console.log(`Server is running on the ${port}`);

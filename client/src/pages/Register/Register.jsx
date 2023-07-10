@@ -37,9 +37,10 @@ const Register = () => {
           handleRegister(data);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.error(error);
+      });
   };
-  console.log(error);
 
   return (
     <div className="register">
