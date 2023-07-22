@@ -124,6 +124,14 @@ app.get('/questions', async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
         $addFields: {
           answerCount: { $size: '$answers' }, // Add a new field to hold the count of answers
         },
@@ -165,35 +173,6 @@ app.get('/questions', async (req, res) => {
     res.status(500).send(error);
   }
 });
-
-// app.get('/questions', async (req, res) => {
-//   try {
-//     const { sort } = req.query;
-
-//     const con = await client.connect();
-//     const data = await con
-//       .db(dbName)
-//       .collection('questions')
-//       .aggregate([
-//         {
-//           $lookup: {
-//             from: 'answers',
-//             localField: '_id',
-//             foreignField: 'questionId',
-//             as: 'answers',
-//           },
-//         },
-//         {
-//           $sort: { date: sort === 'asc' ? 1 : -1 },
-//         },
-//       ])
-//       .toArray();
-//     await con.close();
-//     res.send(data);
-//   } catch (error) {
-//     res.status(500).send(error);
-//   }
-// });
 
 app.get('/questions/:id', async (req, res) => {
   try {

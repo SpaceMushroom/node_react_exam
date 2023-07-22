@@ -27,14 +27,22 @@ const Header = () => {
         </Link>
       </div>
       <nav className="navigation-items">
-        <Link to={MAIN_ROUTE}>Main</Link>
-        <Link to={QUESTIONS_ROUTE}>Questions</Link>
+        <Link className="link" to={MAIN_ROUTE}>
+          <div>Main</div>
+        </Link>
+        <Link to={QUESTIONS_ROUTE}>
+          <div>Questions</div>
+        </Link>
         {isLoggedIn ? (
           <div className="logged">
-            <Link to={NEW_QUESTION_ROUTE}>New question</Link>
+            <Link to={NEW_QUESTION_ROUTE}>
+              <div>New question</div>
+            </Link>
             <Link to={PROFILE_ROUTE} className="user-container">
-              <FaUserCircle className="user" />
-              {user.username}
+              <div>
+                <FaUserCircle className="user" />
+                {user.username}
+              </div>
             </Link>
           </div>
         ) : (

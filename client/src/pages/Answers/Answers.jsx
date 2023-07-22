@@ -91,6 +91,8 @@ const Comments = () => {
         {isEditing ? (
           <div className="edit">
             <textarea
+              cols={120}
+              rows={15}
               type="text"
               value={editedQuestion}
               onChange={handleInputChange}
@@ -100,6 +102,7 @@ const Comments = () => {
         ) : (
           <div>
             <h2>{question.question}</h2>
+            <div className="line"></div>
             <div className="data">
               {question.updated ? (
                 <span>Updated: {new Date(question.date).toLocaleString()}</span>
@@ -121,7 +124,7 @@ const Comments = () => {
         )}
       </div>
       {question.length !== 0 ? (
-        <Answer id={id} question={question} />
+        <Answer isEditing={isEditing} id={id} question={question} />
       ) : (
         <p>Loading data...</p>
       )}

@@ -29,13 +29,13 @@ const Questions = () => {
           <div className="sortContainer">
             <span>Sort by date: </span>
             <Button
-              variant={sort === "asc" ? "contained" : "outlined"}
+              variant={sort === "asc" ? "outlined" : "contained"}
               onClick={() => setSort("asc")}
             >
               Ascending
             </Button>
             <Button
-              variant={sort === "asc" ? "outlined" : "contained"}
+              variant={sort === "asc" ? "contained" : "outlined"}
               onClick={() => setSort("dsc")}
             >
               Descending
@@ -44,19 +44,19 @@ const Questions = () => {
           <div className="filterContainer">
             <span>Filter: </span>
             <Button
-              variant={filter === null ? "contained" : "outlined"}
+              variant={filter === null ? "outlined" : "contained"}
               onClick={() => setFilter(null)}
             >
               All
             </Button>
             <Button
-              variant={filter === "withAnswers" ? "contained" : "outlined"}
+              variant={filter === "withAnswers" ? "outlined" : "contained"}
               onClick={() => setFilter("withAnswers")}
             >
               With Answers
             </Button>
             <Button
-              variant={filter === "withoutAnswers" ? "contained" : "outlined"}
+              variant={filter === "withoutAnswers" ? "outlined" : "contained"}
               onClick={() => setFilter("withoutAnswers")}
             >
               Without Answers
@@ -69,13 +69,21 @@ const Questions = () => {
             <Link to={generatePath(COMMENTS_ROUTE, { id: question._id })}>
               <h3>{question.question}</h3>
             </Link>
+            <div className="line"></div>
             <div className="info">
+              <span>
+                User: <strong>{question.user[0].username} </strong>
+              </span>
               {question.updated ? (
-                <span>Updated: {new Date(question.date).toLocaleString()}</span>
+                <span>
+                  Updated: {new Date(question.date).toLocaleString()}{" "}
+                </span>
               ) : (
-                <span>Date: {new Date(question.date).toLocaleString()}</span>
+                <span>Date: {new Date(question.date).toLocaleString()} </span>
               )}
-              <span> Comments: {question.answers.length}</span>{" "}
+              <span>
+                Comments: <strong>{question.answers.length} </strong>
+              </span>
             </div>
           </div>
         ))}

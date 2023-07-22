@@ -2,6 +2,7 @@
     margin-top: 2rem;
     display: flex;
     justify-content: center;
+    width: 100%;
 
     form {
         display: grid;
@@ -9,7 +10,7 @@
     }
     
     textarea {
-        width: 300px;
+        max-width: 90%;
     }
 
     div {

@@ -8,9 +8,8 @@
     button {
         border: none;
         border-radius: 50%;
-        border: solid white 1px;
-        background-color: $primaryBlueLight;
-        color: white;
+        border: solid rgb(210, 210, 210) 1px;
+        background-color: white;
         cursor: pointer;
         font-weight: 600;
         font-size: 1.3rem;
@@ -19,5 +18,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        color: rgb(210, 210, 210);
     }
 }

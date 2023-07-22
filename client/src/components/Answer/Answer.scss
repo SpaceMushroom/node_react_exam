@@ -12,16 +12,19 @@
     }
 
     .shadow {
-        box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .answerContainer {
         margin-top: 1rem;
         padding: 0.5rem;
-        
         border-radius: 0.5rem;
 
         .editComment {
+            textarea {
+                width: 90%;
+            }
+
             button { 
                 margin: 0.5rem;
             }

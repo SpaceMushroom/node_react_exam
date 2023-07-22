@@ -3,15 +3,13 @@
 .questions {
     min-height: calc(100dvh - 120px);
     width: 100%;
-    background-color: $primaryBlueLight;
-    color: white;
     display: grid;
     
     .container {
         .mapContainer {
             padding: 0.5rem;
-            box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
-            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 0.2rem;
             margin-bottom: 1rem;
         }
 
@@ -19,16 +17,21 @@
         
         a {
             text-decoration: none;
-            color: $secondaryBlue;
+            color: rgb(69, 71, 71);
         }
 
         a :hover {
-            color: white;
+            color: rgb(143, 178, 201);
         }
         .info {
             font-size: 12px;
+            color: rgb(178, 175, 175);
         }
 
+        .line {
+            border-bottom: 1px solid rgb(210, 210, 210);
+            margin: 0.5rem -0.5rem 0.2rem -0.5rem;
+        }
         h3 {
             font-weight: 600;
             margin: 0;

@@ -6,7 +6,7 @@ import Reply from "../Reply/Reply";
 import Counter from "../Counter/Counter";
 import "./Answer.scss";
 
-const Answer = ({ id, question }) => {
+const Answer = ({ id, question, isEditing }) => {
   const { user } = useContext(UserContext);
   const [isCommentEditing, setIsCommentEditing] = useState(false);
   const [editedAnswer, setEditedAnswer] = useState("");
@@ -87,20 +87,27 @@ const Answer = ({ id, question }) => {
                     key={answer._id}
                   >
                     <textarea
+                      cols={120}
+                      rows={15}
                       type="text"
                       value={editedAnswer}
                       onChange={handleAnswerInputChange}
                     />
-                    <Button onClick={() => handleAnswerEditSubmit(answer._id)}>
-                      Save
-                    </Button>
+                    <div>
+                      <Button
+                        onClick={() => handleAnswerEditSubmit(answer._id)}
+                      >
+                        Save
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <>
                     <div className="ansContainer">
                       <Counter answer={answer} />
-                      <h4>{answer.answer}</h4>
+                      <p>{answer.answer}</p>
                     </div>
+                    <div className="line"></div>
                     <div className="info">
                       {answer.updated ? (
                         <span>
@@ -115,30 +122,33 @@ const Answer = ({ id, question }) => {
                   </>
                 )}
 
-                {user && answer.userId === user._id && !isCommentEditing && (
-                  <div className="btnContainer">
-                    <Button
-                      onClick={() =>
-                        handleCommentEdit(answer.answer, answer._id)
-                      }
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      color={"error"}
-                      onClick={() => handleCommentDelete(answer._id)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                )}
+                {user &&
+                  !isEditing &&
+                  answer.userId === user._id &&
+                  !isCommentEditing && (
+                    <div className="btnContainer">
+                      <Button
+                        onClick={() =>
+                          handleCommentEdit(answer.answer, answer._id)
+                        }
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        color={"error"}
+                        onClick={() => handleCommentDelete(answer._id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {user && <Reply id={id} />}
+      {user && !isEditing && !isCommentEditing && <Reply id={id} />}
     </div>
   );
 };

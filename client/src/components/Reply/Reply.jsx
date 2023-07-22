@@ -45,6 +45,8 @@ const Reply = ({ id }) => {
         <textarea
           type="text"
           id="answer"
+          cols={120}
+          rows={15}
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           required

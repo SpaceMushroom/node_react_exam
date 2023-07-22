@@ -34,20 +34,24 @@ const NewQuestion = () => {
 
   return (
     <div className="new">
-      {success && <p>Question submitted successfully!</p>}
-      {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form">
           <label htmlFor="question">Question:</label>
-          <textarea
-            type="text"
-            id="question"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            required
-          />
+          <div className="container">
+            <textarea
+              type="text"
+              id="question"
+              cols={95}
+              rows={15}
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              required
+            />
+          </div>
         </div>
         <Button type="submit">Submit</Button>
+        {success && <p>Question submitted successfully!</p>}
+        {error && <p>{error}</p>}
       </form>
     </div>
   );

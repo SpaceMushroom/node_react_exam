@@ -2,26 +2,30 @@
 
 .new {
     height: calc(100dvh - 120px);
-    background-color: $primaryBlueLight;
-    color: white;
+    width: 100%;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
     .form {
         display: grid;
+        grid-template-columns: 1fr;
         gap: 0.5rem;
-       
-        * {
-            display: grid;
-            gap: 0.3rem;
+        width: 100%;
+
+        .container {
+            width: 100%;
+
+            textarea {
+                margin-bottom: 1rem;
+            }
+            
         }
+        
     }
 
-    textarea {
-        margin-bottom: 1rem;
-        width: 300px;
-    }
+ 
 
     p {
         margin-right: 2rem;
